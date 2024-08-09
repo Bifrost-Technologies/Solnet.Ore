@@ -110,11 +110,15 @@ namespace Solnet.Ore
         public static readonly byte[] MINT_NOISE_SEED = { 89, 157, 88, 232, 243, 249, 197, 132, 199, 49, 19, 234, 91, 94, 150, 41 };
 
         // The addresses of the bus accounts.
-        public static readonly PublicKey[] BUS_ADDRESSES = null;
+        public static readonly PublicKey[] BUS_ADDRESSES = [new PublicKey("C8cEcoWJh6yMEZCm5Pga2PEMVpFq96YM5EBnb7eSVFAi"), new PublicKey("4Sykpy3XtAyTQUddVeSeXwx2pWQqz8jUJS582mVY5hFd"), new PublicKey("M9MspudY8SgTXBq78XTJBoNKF2Z9pHcuY2Jti7YzbFd"), new PublicKey("7PaX43nkYDySeHZndWHNNznqMrPZ7Rkmmo735iHJFyY1"), new PublicKey("AbCULZaMMB1TqzFkLMG2Tika6P1B52Q1mkjHnSWXiksC"), new PublicKey("AbaPgzLdr1SppgPBX1WwrrJamhtJVAyMv6GZQ3mQEw6i"), new PublicKey("2oLNTQKRb4a2117kFi6BYTUDu3RPrMVAHFhCfPKMosxX"), new PublicKey("5HngGmYzvSuh3XyU11brHDpMTHXQQRQQT4udGFtQSjgR")];
 
-       
+        
 
-      
+
+
+
+
+
 
     }
 

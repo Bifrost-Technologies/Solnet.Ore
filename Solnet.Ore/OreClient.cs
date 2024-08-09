@@ -1,4 +1,5 @@
 ﻿using Solnet.Ore.Models;
+using Solnet.Ore;
 using Solnet.Programs;
 using Solnet.Rpc;
 using Solnet.Rpc.Builders;
@@ -22,9 +23,11 @@ namespace Solnet.Ore
             TransactionInstruction priorityFee = ComputeBudgetProgram.SetComputeUnitPrice(600000);
             tb.AddInstruction(CUlimit);
             tb.AddInstruction(priorityFee);
+            Random rng = new Random();
+            int bus_index = rng.Next(0, 7);
             var proof = PDALookup.FindProofPDA(miner);
             var auth = OreProgram.Auth(proof.address);
-            var mine = OreProgram.Mine(miner, null, new PublicKey("AbCULZaMMB1TqzFkLMG2Tika6P1B52Q1mkjHnSWXiksC"), solution);
+            var mine = OreProgram.Mine(miner, miner, OreProperties.BUS_ADDRESSES[bus_index], solution);
             tb.AddInstruction(auth);
             tb.AddInstruction(mine);
             tb.SetRecentBlockHash((await rpcClient.GetLatestBlockHashAsync()).Result.Value.Blockhash);

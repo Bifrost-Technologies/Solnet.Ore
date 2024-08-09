@@ -2,7 +2,7 @@
 {
     public class Solution
     {
-        public byte[] Digest { get; set; }
-        public byte[] Nonce { get; set; }
+        public byte[]? Digest { get; set; }
+        public byte[]? Nonce { get; set; }
     }
 }
