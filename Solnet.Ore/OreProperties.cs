@@ -7,13 +7,14 @@ namespace Solnet.Ore
     public static class OreProperties
     {  
         // Program id for const pda derivations
-        public static readonly PublicKey PROGRAM_ID = new PublicKey("oreV2ZymfyeXgNgBdqMkumTqqAprVqgBWQfoYkrtKWQ"); // Replace with actual program ID
+        public static readonly PublicKey PROGRAM_ID = new PublicKey("oreV2ZymfyeXgNgBdqMkumTqqAprVqgBWQfoYkrtKWQ");
 
         public static readonly PublicKey tokenProgram_ID = new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
 
         public static readonly PublicKey associatedTokenProgram_ID = new PublicKey("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL");
 
         public static readonly PublicKey systemProgram_ID = new PublicKey("11111111111111111111111111111111");
+
         public static readonly PublicKey SystemInstructions_ID = new PublicKey("Sysvar1nstructions1111111111111111111111111");
 
         // The address of the v1 mint account.
