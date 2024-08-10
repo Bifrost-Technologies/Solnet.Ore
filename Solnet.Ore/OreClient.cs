@@ -46,11 +46,11 @@ namespace Solnet.Ore
             return new AccountResultWrapper<Proof>(res, resultingAccount);
         }
 
-        public async Task<RequestResult<string>> MineOre(Account miner, Solution solution)
+        public async Task<RequestResult<string>> MineOre(Account miner, Solution solution, ulong computelimit = 500000, ulong priorityfee = 600000)
         {
             TransactionBuilder tb = new TransactionBuilder();
-            TransactionInstruction CUlimit = OreProgram.SetCUlimit(500000);
-            TransactionInstruction priorityFee = ComputeBudgetProgram.SetComputeUnitPrice(600000);
+            TransactionInstruction CUlimit = OreProgram.SetCUlimit(computelimit);
+            TransactionInstruction priorityFee = ComputeBudgetProgram.SetComputeUnitPrice(priorityfee);
             tb.AddInstruction(CUlimit);
             tb.AddInstruction(priorityFee);
             Random rng = new Random();
@@ -65,11 +65,11 @@ namespace Solnet.Ore
             var signedtx = tb.Build(new Account[] { miner });
             return await rpcClient.SendTransactionAsync(signedtx, false);
         }
-        public async Task<RequestResult<string>> ClaimOre(Account miner, PublicKey beneficiary, ulong amount)
+        public async Task<RequestResult<string>> ClaimOre(Account miner, PublicKey beneficiary, ulong amount, ulong computelimit = 500000, ulong priorityfee = 600000)
         {
             TransactionBuilder tb = new TransactionBuilder();
-            TransactionInstruction CUlimit = OreProgram.SetCUlimit(500000);
-            TransactionInstruction priorityFee = ComputeBudgetProgram.SetComputeUnitPrice(600000);
+            TransactionInstruction CUlimit = OreProgram.SetCUlimit(computelimit);
+            TransactionInstruction priorityFee = ComputeBudgetProgram.SetComputeUnitPrice(priorityfee);
             tb.AddInstruction(CUlimit);
             tb.AddInstruction(priorityFee);
             var proof = PDALookup.FindProofPDA(miner);
@@ -82,11 +82,11 @@ namespace Solnet.Ore
             var signedtx = tb.Build(new Account[] { miner });
             return await rpcClient.SendTransactionAsync(signedtx, false);
         }
-        public async Task<RequestResult<string>> OpenProof(Account signer, PublicKey miner, PublicKey payer)
+        public async Task<RequestResult<string>> OpenProof(Account signer, PublicKey miner, PublicKey payer, ulong computelimit = 500000, ulong priorityfee = 600000)
         {
             TransactionBuilder tb = new TransactionBuilder();
-            TransactionInstruction CUlimit = OreProgram.SetCUlimit(500000);
-            TransactionInstruction priorityFee = ComputeBudgetProgram.SetComputeUnitPrice(600000);
+            TransactionInstruction CUlimit = OreProgram.SetCUlimit(computelimit);
+            TransactionInstruction priorityFee = ComputeBudgetProgram.SetComputeUnitPrice(priorityfee);
             tb.AddInstruction(CUlimit);
             tb.AddInstruction(priorityFee);
             var proof = PDALookup.FindProofPDA(miner);
@@ -99,11 +99,11 @@ namespace Solnet.Ore
             var signedtx = tb.Build(new Account[] { signer });
             return await rpcClient.SendTransactionAsync(signedtx, false);
         }
-        public async Task<RequestResult<string>> CloseProof(Account miner)
+        public async Task<RequestResult<string>> CloseProof(Account miner, ulong computelimit = 500000, ulong priorityfee = 600000)
         {
             TransactionBuilder tb = new TransactionBuilder();
-            TransactionInstruction CUlimit = OreProgram.SetCUlimit(500000);
-            TransactionInstruction priorityFee = ComputeBudgetProgram.SetComputeUnitPrice(600000);
+            TransactionInstruction CUlimit = OreProgram.SetCUlimit(computelimit);
+            TransactionInstruction priorityFee = ComputeBudgetProgram.SetComputeUnitPrice(priorityfee);
             tb.AddInstruction(CUlimit);
             tb.AddInstruction(priorityFee);
             var proof = PDALookup.FindProofPDA(miner);
