@@ -6,6 +6,9 @@ using Solnet.Rpc.Builders;
 using Solnet.Rpc.Core.Http;
 using Solnet.Rpc.Models;
 using Solnet.Wallet;
+using Solnet.Programs.Models;
+using Solnet.Rpc.Types;
+using Solnet.Ore.Accounts;
 
 namespace Solnet.Ore
 {
@@ -16,6 +19,33 @@ namespace Solnet.Ore
         {
             rpcClient = ClientFactory.GetClient(rpc_provider);
         }
+
+        public long GetClock()
+        {
+            return DateTime.Now.Ticks / TimeSpan.TicksPerSecond;
+        }
+
+        public long GetCutoff(Proof proof, ulong bufferTime)
+        {
+            long clock = GetClock();
+
+            long cutoff = proof.LastHashAt + 60 - (long)bufferTime - clock;
+            if (cutoff < 0)
+            {
+                return 0;
+            }
+            return cutoff;
+        }
+
+        public async Task<AccountResultWrapper<Proof>> GetProofAccountAsync(string proofAddress, Commitment commitment = Commitment.Finalized)
+        {
+            var res = await rpcClient.GetAccountInfoAsync(proofAddress, commitment);
+            if (!res.WasSuccessful)
+                return new AccountResultWrapper<Proof>(res);
+            var resultingAccount = Proof.Deserialize(Convert.FromBase64String(res.Result.Value.Data[0]));
+            return new AccountResultWrapper<Proof>(res, resultingAccount);
+        }
+
         public async Task<RequestResult<string>> MineOre(Account miner, Solution solution)
         {
             TransactionBuilder tb = new TransactionBuilder();
