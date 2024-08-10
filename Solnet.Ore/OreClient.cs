@@ -9,6 +9,7 @@ using Solnet.Wallet;
 using Solnet.Programs.Models;
 using Solnet.Rpc.Types;
 using Solnet.Ore.Accounts;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Solnet.Ore
 {
@@ -20,20 +21,19 @@ namespace Solnet.Ore
             rpcClient = ClientFactory.GetClient(rpc_provider);
         }
 
-        public long GetClock()
+        public async Task<long> GetClock()
         {
-            return DateTime.Now.Ticks / TimeSpan.TicksPerSecond;
+            var slot = await rpcClient.GetSlotAsync();
+            var network_clock = await rpcClient.GetBlockTimeAsync(slot.Result);
+            return (long)network_clock.Result;
         }
 
-        public long GetCutoff(Proof proof, ulong bufferTime)
+        public async Task<long> GetCutoff(Proof proof, ulong bufferTime)
         {
-            long clock = GetClock();
-
-            long cutoff = proof.LastHashAt + 60 - (long)bufferTime - clock;
-            if (cutoff < 0)
-            {
-                return 0;
-            }
+            long clock = await GetClock();
+            long cutoff = proof.LastHashAt + (long)60 - (long)bufferTime - clock;
+            Console.WriteLine(cutoff);
+            
             return cutoff;
         }
 
