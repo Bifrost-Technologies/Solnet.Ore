@@ -32,8 +32,7 @@ namespace Solnet.Ore
         {
             long clock = await GetClock();
             long cutoff = proof.LastHashAt + (long)60 - (long)bufferTime - clock;
-            Console.WriteLine(cutoff);
-            
+
             return cutoff;
         }
 
