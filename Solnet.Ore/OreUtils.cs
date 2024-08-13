@@ -45,8 +45,7 @@ namespace Solnet.Ore
         {
             PublicKey.TryFindProgramAddress(new List<byte[]>()
             {
-                OreProperties.TREASURY_SEED,
-                signer
+                OreProperties.TREASURY_SEED
             },
             OreProperties.PROGRAM_ID,
             out PublicKey PDA,
@@ -76,7 +75,7 @@ namespace Solnet.Ore
                 mintPDA
                 
             },
-            OreProperties.PROGRAM_ID,
+            OreProperties.associatedTokenProgram_ID,
             out PublicKey PDA,
             out _);
 

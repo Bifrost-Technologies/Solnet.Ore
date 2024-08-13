@@ -34,8 +34,7 @@ namespace Solnet.Ore
         {
             var proof = PDALookup.FindProofPDA(signer);
             PublicKey treasury = PDALookup.FindTreasuryPDA(signer);
-            var treasuryTokens = AssociatedTokenAccountProgram.DeriveAssociatedTokenAccount(treasury, PDALookup.FindMintPDA());
-
+            var treasuryTokens = PDALookup.FindTreasuryTokensPDA(treasury, PDALookup.FindMintPDA());
             var data = new List<byte>();
             data.Add((byte)OreInstruction.Claim);
             data.AddRange(BitConverter.GetBytes(amount));

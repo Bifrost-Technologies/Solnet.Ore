@@ -64,7 +64,7 @@ namespace Solnet.Ore
             var signedtx = tb.Build(new Account[] { miner });
             return await rpcClient.SendTransactionAsync(signedtx, false);
         }
-        public async Task<RequestResult<string>> ClaimOre(Account miner, PublicKey beneficiary, ulong amount, ulong computelimit = 500000, ulong priorityfee = 600000)
+        public async Task<RequestResult<string>> ClaimOre(Account miner, PublicKey minerTokenAccount, ulong amount, ulong computelimit = 500000, ulong priorityfee = 600000)
         {
             TransactionBuilder tb = new TransactionBuilder();
             TransactionInstruction CUlimit = OreProgram.SetCUlimit(computelimit);
@@ -73,7 +73,7 @@ namespace Solnet.Ore
             tb.AddInstruction(priorityFee);
             var proof = PDALookup.FindProofPDA(miner);
             var auth = OreProgram.Auth(proof.address);
-            var claim = OreProgram.Claim(miner, beneficiary, amount);
+            var claim = OreProgram.Claim(miner, minerTokenAccount, amount);
             tb.AddInstruction(auth);
             tb.AddInstruction(claim);
             tb.SetRecentBlockHash((await rpcClient.GetLatestBlockHashAsync()).Result.Value.Blockhash);

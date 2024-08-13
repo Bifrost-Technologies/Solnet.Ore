@@ -4,7 +4,32 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>Solana.Ore</PackageId>
+    <Title>Solnet.Ore</Title>
+    <Description>Solnet.Ore is a C# sdk and client for the Ore V2 program on Solana</Description>
+    <Copyright>Bifrost</Copyright>
+    <PackageProjectUrl>https://github.com/Bifrost-Technologies/Solnet.Ore</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>solnetore.png</PackageIcon>
+    <RepositoryUrl>https://github.com/Bifrost-Technologies/Solnet.Ore</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>solnet net8 ore ore-cli solana mining</PackageTags>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Bifrost</Authors>
+    <Version>1.0.2</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\..\Desktop\solnetore.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Solana.Extensions" Version="8.0.2" />
