@@ -13,17 +13,16 @@ using Solnet.Wallet;
 Account miner = Account.FromSecretKey("SECRET_KEY_HERE");
 string rpc_provider = "RPC_URL_HERE";
 OreClient oreClient = new OreClient(rpc_provider);
-
+var tokenaccount = AssociatedTokenAccountProgram.DeriveAssociatedTokenAccount(miner.PublicKey, PDALookup.FindMintPDA());
 var proofRequest = await oreClient.GetProofAccountAsync(PDALookup.FindProofPDA(miner.PublicKey).address);
 if (proofRequest != null)
 {
     Proof proof = proofRequest.ParsedResult;
-    long cut_off = oreClient.GetCutoff(proof, 5);
+    long cut_off = await oreClient.GetCutoff(proof, 5);
     string CurrentChallenge = new PublicKey(proof.Challenge).Key;
-    Console.WriteLine("Pool Balance: " + SolHelper.ConvertToSol(proof.Balance));
+    Console.WriteLine("Pool Balance: " + proof.Balance);
     Console.WriteLine("Current Challenge: " + CurrentChallenge);
     Console.WriteLine("Cut Off: " + Convert.ToDateTime(cut_off).ToShortTimeString());
-}
 
 await oreClient.OpenProof(miner, miner, miner);
 
@@ -34,6 +33,7 @@ Solution solution = new Solution
     Nonce = new byte[8],
 };
 await oreClient.MineOre(miner, solution);
-
+await oreClient.ClaimOre(miner, tokenaccount, proof.Balance);
 Console.ReadKey();
+}
 ```
