@@ -8,6 +8,7 @@ using Solnet.Programs.Utilities;
 
 namespace Solnet.Ore.Accounts
 {
+    
         public class Proof
         {
             public PublicKey Authority { get; set; }
@@ -73,8 +74,48 @@ namespace Solnet.Ore.Accounts
 
                 return proof;
             }
+    }
+    public class Bus
+    {
+        public ulong Id { get; set; }
+        public ulong Rewards { get; set; }
+        public ulong TheoreticalRewards { get; set; }
+        public ulong TopBalance { get; set; }
+
+        public byte[] Serialize()
+        {
+            var buffer = new byte[40]; 
+            int offset = 8;
+
+            BitConverter.GetBytes(Id).CopyTo(buffer, offset);
+            offset += 8;
+            BitConverter.GetBytes(Rewards).CopyTo(buffer, offset);
+            offset += 8;
+            BitConverter.GetBytes(TheoreticalRewards).CopyTo(buffer, offset);
+            offset += 8;
+            BitConverter.GetBytes(TopBalance).CopyTo(buffer, offset);
+
+            return buffer;
         }
 
+        public static Bus Deserialize(byte[] data)
+        {
+            var bus = new Bus();
+            int offset = 8;
+
+            bus.Id = BitConverter.ToUInt64(data, offset);
+            offset += 8;
+            bus.Rewards = BitConverter.ToUInt64(data, offset);
+            offset += 8;
+            bus.TheoreticalRewards = BitConverter.ToUInt64(data, offset);
+            offset += 8;
+            bus.TopBalance = BitConverter.ToUInt64(data, offset);
+
+            return bus;
+        }
     }
+
+
+}
 
 

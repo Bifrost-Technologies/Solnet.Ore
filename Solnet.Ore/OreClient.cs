@@ -44,6 +44,14 @@ namespace Solnet.Ore
             var resultingAccount = Proof.Deserialize(Convert.FromBase64String(res.Result.Value.Data[0]));
             return new AccountResultWrapper<Proof>(res, resultingAccount);
         }
+        public async Task<AccountResultWrapper<Bus>> GetBusAccountAsync(string busAddress, Commitment commitment = Commitment.Finalized)
+        {
+            var res = await rpcClient.GetAccountInfoAsync(busAddress, commitment);
+            if (!res.WasSuccessful)
+                return new AccountResultWrapper<Bus>(res);
+            var resultingAccount = Bus.Deserialize(Convert.FromBase64String(res.Result.Value.Data[0]));
+            return new AccountResultWrapper<Bus>(res, resultingAccount);
+        }
 
         public async Task<RequestResult<string>> MineOre(Account miner, Solution solution, ulong computelimit = 500000, ulong priorityfee = 600000)
         {
