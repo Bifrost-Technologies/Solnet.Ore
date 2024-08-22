@@ -34,6 +34,8 @@ Solution solution = new Solution
 };
 await oreClient.MineOre(miner, solution);
 await oreClient.ClaimOre(miner, tokenaccount, proof.Balance);
+await oreClient.StakeOre(miner, proof.balance);
+
 Console.ReadKey();
 }
 ```
