@@ -54,8 +54,32 @@ namespace Solnet.Ore
                 Data = data.ToArray()
             };
         }
+        public static TransactionInstruction Stake(PublicKey signer, PublicKey sender, ulong amount)
+        {
+            var proof = PDALookup.FindProofPDA(signer);
+            PublicKey treasury = PDALookup.FindTreasuryPDA(signer);
+            var treasuryTokens = PDALookup.FindTreasuryTokensPDA(treasury, PDALookup.FindMintPDA());
 
-        public static TransactionInstruction Close(PublicKey signer)
+            var data = new List<byte>();
+            data.Add((byte)OreInstruction.Stake);
+            data.AddRange(BitConverter.GetBytes(amount));
+
+            return new TransactionInstruction
+            {
+                ProgramId = OreProperties.PROGRAM_ID,
+                Keys = new List<AccountMeta>
+            {
+                AccountMeta.Writable(signer, true),
+                AccountMeta.Writable(proof.address, false),
+                AccountMeta.Writable(sender, false),
+                AccountMeta.Writable(treasuryTokens, false),
+                AccountMeta.ReadOnly(TokenProgram.ProgramIdKey, false)
+            },
+                Data = data.ToArray()
+            };
+        }
+    
+    public static TransactionInstruction Close(PublicKey signer)
         {
             var proof = PDALookup.FindProofPDA(signer);
             var _data = new List<byte>();

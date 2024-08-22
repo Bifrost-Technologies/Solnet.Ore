@@ -14,12 +14,12 @@ namespace Solnet.Ore
     /// </summary>
     public static class PDALookup
     {
-        public static PublicKey FindBusPDA(PublicKey signer)
+        public static PublicKey FindBusPDA(byte bus_id)
         {
             PublicKey.TryFindProgramAddress(new List<byte[]>()
             {
                 OreProperties.BUS_SEED,
-                signer
+              new byte[]{ bus_id },
             },
             OreProperties.PROGRAM_ID,
             out PublicKey PDA,
