@@ -97,8 +97,9 @@ namespace Solnet.Ore
             tb.AddInstruction(CUlimit);
             tb.AddInstruction(priorityFee);
             var proof = PDALookup.FindProofPDA(miner);
+            var minerTokenAccount = AssociatedTokenAccountProgram.DeriveAssociatedTokenAccount(miner, PDALookup.FindMintPDA());
             var auth = OreProgram.Auth(proof.address);
-            var stake = OreProgram.Stake(miner, miner, amount);
+            var stake = OreProgram.Stake(miner, minerTokenAccount, amount);
             tb.AddInstruction(auth);
             tb.AddInstruction(stake);
             tb.SetRecentBlockHash((await rpcClient.GetLatestBlockHashAsync()).Result.Value.Blockhash);

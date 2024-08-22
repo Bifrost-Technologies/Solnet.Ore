@@ -54,7 +54,7 @@ namespace Solnet.Ore
                 Data = data.ToArray()
             };
         }
-        public static TransactionInstruction Stake(PublicKey signer, PublicKey sender, ulong amount)
+        public static TransactionInstruction Stake(PublicKey signer, PublicKey tokenAccount, ulong amount)
         {
             var proof = PDALookup.FindProofPDA(signer);
             PublicKey treasury = PDALookup.FindTreasuryPDA(signer);
@@ -71,15 +71,15 @@ namespace Solnet.Ore
             {
                 AccountMeta.Writable(signer, true),
                 AccountMeta.Writable(proof.address, false),
-                AccountMeta.Writable(sender, false),
+                AccountMeta.Writable(tokenAccount, false),
                 AccountMeta.Writable(treasuryTokens, false),
                 AccountMeta.ReadOnly(TokenProgram.ProgramIdKey, false)
             },
                 Data = data.ToArray()
             };
         }
-    
-    public static TransactionInstruction Close(PublicKey signer)
+
+        public static TransactionInstruction Close(PublicKey signer)
         {
             var proof = PDALookup.FindProofPDA(signer);
             var _data = new List<byte>();
@@ -145,6 +145,7 @@ namespace Solnet.Ore
                 },
                 Data = data.ToArray()
             };
+
         }
     }
 }
