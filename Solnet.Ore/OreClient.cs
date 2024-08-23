@@ -44,16 +44,32 @@ namespace Solnet.Ore
             var resultingAccount = Proof.Deserialize(Convert.FromBase64String(res.Result.Value.Data[0]));
             return new AccountResultWrapper<Proof>(res, resultingAccount);
         }
-        public async Task<AccountResultWrapper<Bus>> GetBusAccountAsync(string busAddress, Commitment commitment = Commitment.Finalized)
+        public async Task<Bus> GetTopBusAccountAsync(Commitment commitment = Commitment.Finalized)
         {
-            var res = await rpcClient.GetAccountInfoAsync(busAddress, commitment);
-            if (!res.WasSuccessful)
-                return new AccountResultWrapper<Bus>(res);
-            var resultingAccount = Bus.Deserialize(Convert.FromBase64String(res.Result.Value.Data[0]));
-            return new AccountResultWrapper<Bus>(res, resultingAccount);
+            List<string> addresses = new List<string>();
+            OreProperties.BUS_ADDRESSES.ToList().ForEach(e => addresses.Add(e.Key));
+            var res = await rpcClient.GetMultipleAccountsAsync(addresses, commitment);
+            ulong top_balance = 0;
+            ulong top_bus_id = 0;
+            Bus? top_bus = new Bus();
+            foreach(var data in res.Result.Value)
+            {
+
+                var resultingAccount = Bus.Deserialize(Convert.FromBase64String(data.Data[0]));
+                if(resultingAccount.Rewards > top_balance)
+                {
+                   
+                    top_balance = resultingAccount.Rewards;
+                    top_bus_id = resultingAccount.Id;
+                    top_bus = resultingAccount;
+                }
+       
+            }
+            
+            return top_bus;
         }
 
-        public async Task<RequestResult<string>> MineOre(Account miner, Solution solution, ulong computelimit = 500000, ulong priorityfee = 600000)
+        public async Task<RequestResult<string>> MineOre(Account miner, Solution solution,int bus_index = 0, ulong computelimit = 500000, ulong priorityfee = 600000)
         {
             TransactionBuilder tb = new TransactionBuilder();
             TransactionInstruction CUlimit = OreProgram.SetCUlimit(computelimit);
@@ -61,7 +77,16 @@ namespace Solnet.Ore
             tb.AddInstruction(CUlimit);
             tb.AddInstruction(priorityFee);
             Random rng = new Random();
-            int bus_index = rng.Next(0, 7);
+            Bus top_bus = await GetTopBusAccountAsync();
+            if (top_bus != null && top_bus.Id != null) 
+            {
+                bus_index = (int)top_bus.Id;
+            }
+            else
+            {
+                bus_index = rng.Next(0, 7);
+            }
+            
             var proof = PDALookup.FindProofPDA(miner);
             var auth = OreProgram.Auth(proof.address);
             var mine = OreProgram.Mine(miner, miner, OreProperties.BUS_ADDRESSES[bus_index], solution);
